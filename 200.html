@@ -1,15 +1,251 @@
 <!doctype html>
 <html lang="ja">
-<meta charset="utf-8">
-<title>200 OK</title>
-<style>
-body{text-align:center;font-family:sans-serif;margin:0}
-h1{background:#333;color:white;margin:0;padding:1em}
-.dummy{font-size:128px}
-</style>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>200 OK</title>
+    <style>
+        :root{
+            --bg:#f7ece6;
+            --ink:#3e3129;
+            --muted:#7a6d61;
+            --paper:#fff7ef;
+            --meat:#c24a3f;
+            --fat:#f0d2c4;
+            --bone:#f5e5d8;
+            --highlight:#e8b3a7;
+            --char:#7f3f35;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            background:radial-gradient(circle at top left,rgba(194,74,63,.12) 0,transparent 34%),radial-gradient(circle at bottom right,rgba(247,229,230,.8) 0,transparent 38%),var(--bg);
+            color:var(--ink);
+            font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+            overflow:hidden;
+        }
+        .wrap{
+            min-height:100%;
+            display:grid;
+            place-items:center;
+            padding:clamp(18px,4vw,52px);
+        }
+        main{
+            width:min(100%,980px);
+            display:grid;
+            gap:clamp(18px,3vw,32px);
+            grid-template-columns:minmax(0,1fr);
+            align-items:center;
+        }
+        .card{
+            position:relative;
+            isolation:isolate;
+            border:1px solid rgba(62,49,41,.18);
+            background:linear-gradient(180deg,rgba(255,247,239,.96),rgba(247,236,227,.9));
+            box-shadow:0 30px 90px rgba(62,49,41,.12);
+            border-radius:28px;
+            padding:clamp(24px,5vw,54px);
+            overflow:hidden;
+        }
+        .card:before{
+            content:"";
+            position:absolute;
+            inset:16px;
+            border:1px dashed rgba(62,49,41,.16);
+            border-radius:20px;
+            z-index:-1;
+        }
+        .head{
+            display:flex;
+            justify-content:space-between;
+            gap:16px;
+            align-items:flex-start;
+            margin-bottom:8px;
+        }
+        .brand,
+        .code{
+            font-size:12px;
+            letter-spacing:.08em;
+            text-transform:uppercase;
+            color:var(--muted);
+        }
+        .code{
+            font-weight:800;
+            color:var(--ink);
+        }
+        .hero{
+            display:grid;
+            grid-template-columns:1fr;
+            gap:22px;
+            align-items:center;
+        }
+        .text{
+            max-width:590px;
+        }
+        .num{
+            font-size:clamp(72px,3vw,180px);
+            line-height:.8;
+            letter-spacing:-.08em;
+            margin:0 0 12px;
+            font-weight:900;
+        }
+        .num span{
+            display:inline-block;
+            transform:translateX(-.04em);
+        }
+        h1{
+            font-size:clamp(24px,2.3vw,52px);
+            line-height:1.05;
+            letter-spacing:-.05em;
+            margin:0 0 14px;
+        }
+        p{
+            font-size:clamp(14px,1.7vw,17px);
+            line-height:1.9;
+            margin:0;
+            color:var(--muted);
+        }
+        .artbox{
+            position:relative;
+            min-height:clamp(260px,40vw,430px);
+            display:grid;
+            place-items:center;
+        }
+        canvas{
+            width:100%;
+            max-width:720px;
+            aspect-ratio:16/9;
+            image-rendering:pixelated;
+            border-radius:20px;
+            background:linear-gradient(180deg,rgba(255,247,239,.96),rgba(247,236,227,.9));
+        }
+        .note{
+            position:fixed;
+            right:16px;
+            bottom:14px;
+            font-size:11px;
+            letter-spacing:.1em;
+            color:rgba(62,49,41,.35);
+        }
+        @media (min-width:780px){
+            .hero{grid-template-columns:.95fr 1.05fr;}
+            .artbox{min-height:410px;}
+            .text{align-self:center;}
+        }
+        @media (max-height:720px){
+            body{overflow:auto;}
+            .wrap{place-items:start center;}
+        }
+        @media (prefers-reduced-motion:no-preference){
+            .card{animation:rise .7s cubic-bezier(.22,1,.36,1) both;}
+            @keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+        }
+    </style>
+</head>
 <body>
-<h1>200 OK</h1>
-<div class="dummy">✅</div>
-<p>うまいこといったで。問題なしや。</p>
+    <div class="wrap">
+        <main class="card" aria-live="polite">
+            <div class="head">
+                <div class="brand">STATUS PAGE</div>
+                <div class="code">200 OK</div>
+            </div>
+            <section class="hero">
+                <div class="text">
+                    <p class="brand">HTTP STATUS</p>
+                    <h2 class="num"><span>200</span></h2>
+                    <h1>捕獲に成功しました。美味しくいただきましょう</h1>
+                    <p>通信完了</p>
+                </div>
+                <div class="artbox"><canvas id="art" width="960" height="540" aria-label="ドット絵の肉"></canvas></div>
+            </section>
+        </main>
+    </div>
+    <div class="note">single html / no image</div>
+    <script>
+        (()=>{
+            const cv=document.getElementById("art");
+            const c=cv.getContext("2d");
+            const C={
+                ink: "#3e3129",
+                meat: "#c24a3f",
+                fat: "#f0d2c4",
+                bone: "#f5e5d8",
+                highlight: "#e8b3a7",
+                shadow: "#8a3d36",
+                edge: "#7f3f35"
+            };
+            let W=960,H=540,S=8,OX=0,OY=0;
+            function size(){
+                const r=cv.getBoundingClientRect();
+                const d=devicePixelRatio||1;
+                cv.width=Math.max(1,Math.floor(r.width*d));
+                cv.height=Math.max(1,Math.floor(r.height*d));
+                c.setTransform(d,0,0,d,0,0);
+                W=r.width; H=r.height;
+                S=Math.floor(Math.min(W/96,H/54));
+                OX=(W-S*96)/2; OY=(H-S*54)/2;
+                draw();
+            }
+            addEventListener("resize",size,{passive:true});
+            function px(x,y,w=1,h=1,col=C.ink){
+                c.fillStyle=col;
+                c.fillRect(Math.round(OX+x*S),Math.round(OY+y*S),w*S,h*S);
+            }
+            function drawMeat(){
+                // meat body
+                px(28,18,40,16,C.meat);
+                px(26,20,2,12,C.meat);
+                px(68,20,2,12,C.meat);
+                px(26,18,2,2,C.meat);
+                px(68,18,2,2,C.meat);
+                px(26,30,44,2,C.meat);
+                px(24,22,2,8,C.meat);
+                px(70,22,2,8,C.meat);
+                px(24,24,2,4,C.meat);
+                px(70,24,2,4,C.meat);
+                
+                // fat lines
+                px(32,20,8,2,C.fat);
+                px(44,22,10,2,C.fat);
+                px(54,26,6,1,C.fat);
+                px(38,26,4,1,C.highlight);
+                
+                // bone
+                px(50,24,12,8,C.bone);
+                px(48,26,2,4,C.bone);
+                px(62,26,2,4,C.bone);
+                px(52,28,8,4,C.ink);
+                px(52,28,2,2,C.fat);
+                px(58,28,2,2,C.fat);
+                
+                // char marks
+                px(30,28,2,1,C.edge);
+                px(40,32,1,1,C.edge);
+                px(50,34,1,1,C.edge);
+                px(60,30,2,1,C.edge);
+                px(64,22,2,1,C.shadow);
+                
+                // outline
+                px(26,18,44,1,C.ink);
+                px(26,18,1,12,C.ink);
+                px(69,18,1,12,C.ink);
+                px(26,30,44,1,C.ink);
+                px(24,22,1,8,C.ink);
+                px(71,22,1,8,C.ink);
+                px(50,24,12,1,C.ink);
+                px(49,25,1,7,C.ink);
+                px(62,25,1,7,C.ink);
+                px(52,31,8,1,C.ink);
+            }
+            function draw(){
+                c.clearRect(0,0,W,H);
+                c.fillStyle="rgba(255,247,239,0.9)";
+                c.fillRect(0,0,W,H);
+                drawMeat();
+            }
+            size();
+        })();
+    </script>
 </body>
 </html>
