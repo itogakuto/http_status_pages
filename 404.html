@@ -58,41 +58,41 @@
             justify-content:space-between;
             gap:16px;
             align-items:flex-start;
-            margin-bottom:8px
+            margin-bottom:8px;
         }
         .brand,
         .code{
             font-size:12px;
-            letter-spacing:.18em;
+            letter-spacing:.08em;
             text-transform:uppercase;
-            color:var(--muted)
+            color:var(--muted);
         }
         .code{
             font-weight:800;
-            color:var(--ink)
+            color:var(--ink);
         }
         .hero{
             display:grid;
             grid-template-columns:1fr;
             gap:22px;
-            align-items:center
+            align-items:center;
         }
         .text{
-            max-width:590px
+            max-width:590px;
         }
         .num{
-            font-size:clamp(72px,17vw,180px);
+            font-size:clamp(72px,3vw,180px);
             line-height:.8;
             letter-spacing:-.08em;
             margin:0 0 12px;
-            font-weight:900
+            font-weight:900;
         }
         .num span{
             display:inline-block;
-            transform:translateX(-.04em)
+            transform:translateX(-.04em);
         }
         h1{
-            font-size:clamp(24px,4vw,52px);
+            font-size:clamp(24px,2.3vw,52px);
             line-height:1.05;
             letter-spacing:-.05em;
             margin:0 0 14px
@@ -134,7 +134,7 @@
                 min-height:410px
             }
             .text{
-                align-self:end
+                align-self:center;
             }
         }
         @media (max-height:720px){
@@ -182,7 +182,7 @@
     <script>
         (()=>{
             const txt={
-                404:["404 NOT FOUND","鹿がページを探しています","草がないメェ"]
+                404:["404 NOT FOUND","鹿がページを探しています","URLを再度確認してください。"]
             };
             const raw=
                 (location.search+location.hash+location.pathname).toLowerCase(),status=404;
